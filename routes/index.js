@@ -22,10 +22,29 @@ client.on('message', function (topic, message) {
                         values 
                         (${data.id_type},NOW(), ${data.id_user}, "${data.script}")`,function(err,rows) {
                 if(err){
-                 
-                 console.log(`Error: ${err} `)
+                    console.log(`Error: ${err} `)
                 }else{
-                    console.log(rows);
+                    child_process.exec(`ECHO "Execution of ${data.script} in progress..." > result.log`).toString('utf8');
+                    child_process.exec(`rm ./cypress/videos/${data.script}.spec.js.mp4`).toString('utf8');
+
+                    //child_process.exec(`npx cypress run --quiet --headless --spec "cypress/integration/${currentTest}.spec.js" >> result_${currentTest}.log`).toString('utf8');
+                    const ls=child_process.spawn('npx', ['cypress','run','--quiet', '--headless', '--spec',`./cypress/integration/${data.script}.spec.js`]);
+                    
+                    ls.stdout.on("data", datax => {
+                        console.log(`stdout: ${datax}`);
+                    });
+
+                    ls.stdout.on("close", (datax)=>{
+                        console.log("Finish")
+                        client.publish('terminator', `{"script":"${data.script}"}`);
+                        let queryInsertTerminator=`UPDATE test_executed SET finished=NOW() WHERE id_execution=${rows.insertId}`
+                        console.log(queryInsertTerminator);
+                        connection.query(`${queryInsertTerminator}`,function(err,rows) {
+                                if(err){
+                                    console.log(`Error: ${err} `)
+                                }
+                        })
+                    })
                 }
             });
         }
