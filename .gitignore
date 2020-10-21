@@ -1,6 +1,6 @@
 #Useless OS X storage files
 .DS_Store
-*/.DS_Store
+*.DS_Store
 
 # Videos
 cypress/videos/
