@@ -1,0 +1,26 @@
+{
+  "name": "cucumber-solution",
+  "version": "1.0.0",
+  "description": "cucumber-solution",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.0.0-rc.0",
+    "chai": "^4.2.0",
+    "cucumber": "^7.0.0-rc.0",
+    "node-fetch": "^2.6.1",
+    "puppeteer": "^5.3.1"
+  }
+}
