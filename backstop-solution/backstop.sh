@@ -1,2 +1,2 @@
-cd $2
+cd ./backstop-solution/$2
 ./node_modules/.bin/backstop $1 --config=$2.json

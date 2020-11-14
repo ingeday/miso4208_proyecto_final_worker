@@ -3,10 +3,10 @@ extension="${filename##*.}"
 filename="${filename%.*}"
 
 NEW_DIR=$filename
-mkdir $NEW_DIR
-mv $NEW_DIR.json $NEW_DIR/$NEW_DIR.json
-mkdir $NEW_DIR/backstop_data
-cd $NEW_DIR/backstop_data
+mkdir ./backstop-solution/$NEW_DIR
+mv ./backstop-solution/$NEW_DIR.json ./backstop-solution/$NEW_DIR/$NEW_DIR.json
+mkdir ./backstop-solution/$NEW_DIR/backstop_data
+cd ./backstop-solution/$NEW_DIR/backstop_data
 ln -s ../../backstop-base/backstop_data/engine_scripts/ engine_scripts
 cd ..
 ln -s ../../node_modules/ node_modules
