@@ -1,0 +1,3 @@
+[submodule "MutAPK"]
+	path = MutAPK
+	url = https://github.com/ingeday/MutAPK.git
