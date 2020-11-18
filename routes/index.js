@@ -200,12 +200,33 @@ client.on('message', function (topic, message) {
             }
 
             if(data.id_type==5) {
-                // Appium & Android
+                // Cucumber
+                console.log(`Testing with Cucumber ${data.script}`)
 
+                connection.query(`INSERT INTO test_executed 
+                        (id_type, started, id_user, script) 
+                        values 
+                        (${data.id_type},NOW(), ${data.id_user}, "${data.script}.zip")`,function(err,rows) {
+                    if(err){
+                        console.log(`Error: ${err} `)
+                    }else{
+
+                        // Executing MutAPK
+                        const ls=child_process.spawn('./cucumber-solution/rexec.sh', [`${data.script}`]);
+                        console.log(`Wait, We're running Cucumber Worker`); 
+                        ls.stdout.on("data", datax => {
+                            console.log(`${datax}`);
+                        });
+
+                        ls.stdout.on("close", (datax)=>{
+                            console.log("Execution of Cucumber has finished!")
+                        }); 
+                    }
+                }); 
             }
 
             if(data.id_type==6) {
-                // Cucumber
+                // Appium & Android
 
             }
 
