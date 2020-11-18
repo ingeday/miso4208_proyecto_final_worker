@@ -150,11 +150,68 @@ client.on('message', function (topic, message) {
         
                                 ls.stdout.on("close", (datax)=>{
                                   console.log("Execution Finished")
+                                  
                                 });
                             });
                         }); 
                     }
                 }); 
+            }
+
+
+            if(data.id_type==4) {
+                console.log(`VRT with ${data.script}`)
+
+                connection.query(`INSERT INTO test_executed 
+                        (id_type, started, id_user, script) 
+                        values 
+                        (${data.id_type},NOW(), ${data.id_user}, "${data.script}:${data.name}.json")`,function(err,rows) {
+                    if(err){
+                        console.log(`Error: ${err} `)
+                    }else{
+                        fs.readFile(`./backstop-solution/template.json`, 'utf8', function (err,datafile) {
+                            if (err) {
+                              return console.log(err);
+                            }
+                            // Cloning & Replacing the parameters-template
+                            var result = datafile.replace(/#id/g, `${data.name}`);
+                            result = result.replace(/#url/g, `${data.url}`);
+                            result = result.replace(/#referenceUrl/g, `${data.url2}`);
+                          
+                            fs.writeFile(`./backstop-solution/script-for-${data.name}.json`, result, 'utf8', function (err) {
+                               if (err) return console.log(err);
+                               console.log(`Scenarios file created: script-for-${data.name}`)
+                            
+                               // Executing MutAPK
+                               const ls=child_process.spawn('./backstop-solution/rrt.sh', [`script-for-${data.name}.json`,`script-for-${data.name}`]);
+                               console.log(`Wait, We're running Backstopjs`); 
+                               ls.stdout.on("data", datax => {
+                                    console.log(`${datax}`);
+                                });
+        
+                                ls.stdout.on("close", (datax)=>{
+                                  console.log("Execution of Backstop has finished!")
+                                });
+                            });
+                        }); 
+                    }
+                }); 
+
+            }
+
+            if(data.id_type==5) {
+                // Appium & Android
+
+            }
+
+            if(data.id_type==6) {
+                // Cucumber
+
+            }
+
+            if(data.id_type==7) {
+                // Monkeys with ADB (Android)
+
             }
             
         }
